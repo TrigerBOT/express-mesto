@@ -7,7 +7,7 @@ const cardsRout=require('./routes/cardsRout');
 app.use(express.static(path.join(__dirname, 'public'))); // теперь клиент имеет доступ только к публичным файлам
 app.use('/users', usersRout);
 app.use('/cards',cardsRout);
-app.use('/', (req, res) => {
+app.use('*', (req, res) => {
   res
     .status(404)
     .send({ message: 'Запрашиваемый ресурс не найден' });

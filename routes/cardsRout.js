@@ -2,7 +2,7 @@ const router = require('express').Router();
 const path = require('path');
 const getDataFromFile = require('../utils/read-file');
 const dataPath =path.join(__dirname, '..', 'utils', 'cards.json');
-const getAllCards = (req, res) => (
+const getAllCards = (req, res) => {
   getDataFromFile(dataPath)
     .then((data) => {
       if (!data) {
@@ -15,6 +15,6 @@ const getAllCards = (req, res) => (
         .status(200)
         .send(data);
     })
-);
+  };
 router.get('/', getAllCards);
 module.exports = router;

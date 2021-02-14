@@ -2,7 +2,7 @@ const router = require('express').Router();
 const path = require('path');
 const getDataFromFile = require('../utils/read-file');
 const dataPath =path.join(__dirname, '..', 'utils', 'users.json');
-const getAllUsers = (req, res) => (
+const getAllUsers = (req, res) => {
   getDataFromFile(dataPath)
     .then((data) => {
       if (!data) {
@@ -11,16 +11,16 @@ const getAllUsers = (req, res) => (
       }
       res.status(200).send(data);
     })
-);
+  };
 
-const getUserById = (req, res) => (
+const getUserById = (req, res) => {
   getDataFromFile(dataPath)
     .then((data) => {
       if (!data) {
         res.status(500).send({ message: 'Внутренняя ошибка сервера' });
         return;
       }
-      const foundUser = data.find((user) => user._id === req.params.id);
+      const foundUser = data.find((user) => user._id === req.params._id);
 
       if (!foundUser) {
         res.status(404).send({ message: 'Нет пользователя с таким id' });
@@ -29,7 +29,7 @@ const getUserById = (req, res) => (
 
       res.status(200).send(foundUser);
     })
-);
+  };
 router.get('/', getAllUsers);
 router.get('/:_id', getUserById);
 module.exports = router;

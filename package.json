@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "`/public` — статика, полученная в результате билда фронтенд-приложения на Реакте  \r `/data` — JSON-файлы для временной эмуляции работы с базой данных  \r `/routes` — папка с файлами роутера",
   "main": "index.js",
-  	  "scripts": {
+  "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TrigerBOT/express-mesto.git"
@@ -24,7 +24,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.15.0",
     "@typescript-eslint/parser": "^4.15.0",
-    "eslint": "^7.19.0",
+    "eslint": "^7.20.0",
     "eslint-plugin-react": "^7.22.0",
     "nodemon": "^2.0.7"
   }

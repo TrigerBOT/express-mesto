@@ -1,37 +1,17 @@
-const router = require('express').Router();
-const path = require('path');
-const getDataFromFile = require('../utils/read-file');
-const dataPath =path.join(__dirname, '..', 'data', 'users.json');
-const getAllUsers = (req, res) => {
-  getDataFromFile(dataPath)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({ message: 'Нет пользователей' });
-        return;
-      }
-      res.status(200).send(data);
-    })
-    .catch(()=>{ res.status(500).send({message:'Внутренняя ошибка сервера'})})
-  };
+const router = require("express").Router();
 
-const getUserById = (req, res) => {
-  getDataFromFile(dataPath)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({ message: 'Нет пользователей' });
-        return;
-      }
-      const foundUser = data.find((user) => user._id === req.params._id);
+const {
+  createUser,
+  getUser,
+  getUserById,
+  updateProfile,
+  updateAvatar,
+} = require("../controllers/users");
 
-      if (!foundUser) {
-        res.status(404).send({ message: 'Нет пользователя с таким id' });
-        return;
-      }
+router.post("/", createUser);
+router.get("/", getUser);
+router.get("/:id", getUserById);
+router.patch("/:me", updateProfile);
+router.patch("/:_id/avatar", updateAvatar);
 
-      res.status(200).send(foundUser);
-    })
-    .catch(()=>{ res.status(500).send({message:'Внутренняя ошибка сервера'})})
-  };
-router.get('/', getAllUsers);
-router.get('/:_id', getUserById);
 module.exports = router;

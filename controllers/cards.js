@@ -1,4 +1,4 @@
-const Card = require("../models/card");
+const Card = require('../models/card');
 
 module.exports.createCard = (req, res) => {
   const { _id } = req.user;
@@ -9,10 +9,10 @@ module.exports.createCard = (req, res) => {
       res.status(200).send({ data: card });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(400).send({ message: "Переданы некорректные данные" });
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(500).send({ message: "На сервере произошла ошибка" });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -20,61 +20,60 @@ module.exports.createCard = (req, res) => {
 module.exports.getAllCards = (req, res) => {
   Card.find({})
     .then((card) => res.status(200).send({ data: card }))
-    .catch(() =>
-      res.status(500).send({ message: "На сервере произошла ошибка" })
-    );
+    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.id)
-    .orFail(new Error("NotValidId"))
+  Card.findByIdAndRemove(req.params._id)
+    .orFail(new Error('NotValidId'))
     .then((card) => {
       res.status(200).send({ data: card });
     })
     .catch((err) => {
-      if (err.message === "NotValidId") {
-        res.status(404).send({ message: "Карточка не найдена" });
+      if (err.message && err.message.indexOf('Cast to ObjectId failed')) {
+        res.sendStatus(404).send({ message: 'Карточка не найдена' });
+      }
+      if (err.message === 'NotValidId') {
+        res.status(400).send({ message: 'Неправильный id карточки' });
       } else {
-        res.status(500).send({ message: "На сервере произошла ошибка" });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
 
 module.exports.addLikeCard = (req, res) => {
   Card.findByIdAndUpdate(
-    req.params.id,
+    req.params._id,
     { $addToSet: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
-    .orFail(new Error("NotValidId"))
+    .orFail(new Error('NotValidId'))
     .then((card) => {
       res.status(200).send({ data: card });
     })
     .catch((err) => {
-      if (err.message === "NotValidId") {
-        res.status(400).send({ message: "Айди отправленное пользователем неправильное" });
+      if (err.message === 'NotValidId') {
+        res.status(400).send({ message: 'Айди отправленное пользователем неправильное' });
       } else {
-        res.status(500).send({ message: "На сервере произошла ошибка" });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
 
 module.exports.removeLikeCard = (req, res) => {
   Card.findByIdAndUpdate(
-    req.params.id,
+    req.params._id,
     { $pull: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
-    .orFail(new Error("NotValidId"))
+    .orFail(new Error('NotValidId'))
     .then((card) => {
       res.status(200).send({ data: card });
     })
     .catch((err) => {
-      console.log(err.message);
-      if (err.message === "NotValidId") {
-        res.status(400).send({ message: "Айди отправленное пользователем неправильное" });
-      } else {
-        res.status(500).send({ message: "На сервере произошла ошибка" });
+      if (err.message === 'NotValidId') {
+        return res.status(400).send({ message: 'Айди отправленное пользователем неправильное' });
       }
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
 };

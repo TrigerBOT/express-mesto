@@ -23,12 +23,10 @@ module.exports.getUser = (req, res) => {
 
 module.exports.getUserById = (req, res) => {
   User.findById(req.params._id)
-    .orFail(() => { throw new Error('noUser'); })
     .then((user) => {
       res.status(200).send({ data: user });
     })
     .catch((err) => {
-      console.log(err);
       if (err.kind === 'ObjectId') {
         return res.status(400).send({ message: 'Айди неправильное ' });
       }

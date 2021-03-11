@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 
   next();
 });
-app.use(express.static(path.join(__dirname, 'public'))); // теперь клиент имеет доступ только к публичным файлам
+ // теперь клиент имеет доступ только к публичным файлам
 app.use('/users', usersRout);
 app.use('/cards', cardsRout);
 app.use('*', (req, res) => {

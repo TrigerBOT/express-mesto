@@ -2,7 +2,6 @@ const express = require('express');
 
 const { PORT = 3000 } = process.env;
 const mongoose = require('mongoose');
-const path = require('path');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -24,7 +23,7 @@ app.use((req, res, next) => {
 
   next();
 });
- // теперь клиент имеет доступ только к публичным файлам
+// теперь клиент имеет доступ только к публичным файлам
 app.use('/users', usersRout);
 app.use('/cards', cardsRout);
 app.use('*', (req, res) => {

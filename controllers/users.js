@@ -24,14 +24,15 @@ module.exports.getUser = (req, res) => {
 module.exports.getUserById = (req, res) => {
   User.findById(req.params._id)
     .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: 'Нет пользователя с таким id' });
+        return;
+      }
       res.status(200).send({ data: user });
     })
     .catch((err) => {
       if (err.kind === 'ObjectId') {
         return res.status(400).send({ message: 'Айди неправильное ' });
-      }
-      if (err.message && err.message.indexOf('Cast to ObjectId failed')) {
-        res.sendStatus(404).send({ message: 'Нет пользователя с таким id ' });
       }
       return res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
@@ -46,7 +47,7 @@ module.exports.updateProfile = (req, res) => {
     {
       new: true,
       runValidators: true,
-      upsert: true,
+      upsert: false,
     },
   )
     .then((user) => res.status(200).send({ data: user }))
